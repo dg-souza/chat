@@ -59,7 +59,7 @@ const Chat = props => {
                         :
 
                         <>
-                            <h1>Sexo</h1>
+                            <h1>Nothing</h1>
                         </>
                 }
             </div>
