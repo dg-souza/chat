@@ -4,7 +4,8 @@ const userSlicer = createSlice({
     name: 'user',
     initialState: {
         name: '',
-        id: ''
+        id: '',
+        idRoom: ''
     },
     reducers: {
         login(state, action) {
@@ -13,9 +14,13 @@ const userSlicer = createSlice({
             state.name = userInfo.name
             state.id = userInfo.id
         },
+        setIdRoom(state, action) {
+            state.idRoom = action.payload
+        },
         logout(state) {
             state.name = ''
             state.id = ''
+            state.idRoom = ''
         }
     }
 })

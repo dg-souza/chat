@@ -16,7 +16,7 @@ const App = () => {
       <BrowserRouter>
         <Routes>
           <Route path='/' element={<Login socket={socket} />} />
-          <Route path='/chat' element={<Chat socket={socket} />} />
+          <Route path='/chat/:id' element={<Chat socket={socket} />} />
         </Routes>
       </BrowserRouter>
     </Container>

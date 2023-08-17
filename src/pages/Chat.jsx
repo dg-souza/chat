@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { userActions } from '../reducer/user'
 
@@ -18,17 +18,15 @@ const Chat = props => {
     const [messages, setMessages] = useState([])
     const [currentUser, setCurrentUser] = useState({})
 
-    useEffect(() => {
-        socket.on('sendChat', (response, user) => {
-            setMessages(response)
+    socket.on('sendChat', (response) => {
+        setMessages(response)
+    })
 
-            setCurrentUser(user)
+    socket.on('receiveLogin', user => {
+        setCurrentUser(user)
 
-            console.log(user)
-
-            dispatch(userActions.login({ name: user.name, id: user._id }))
-        })
-    }, [])
+        dispatch(userActions.login({ name: user.name, id: user._id }))
+    })
 
     socket.on('getAllMessages', (messages) => {
         setMessages(messages)
@@ -38,15 +36,25 @@ const Chat = props => {
         <ChatContent>
             <div className='chat-content'>
                 {
-                    messages.length > 0
+                    messages !== null
 
                         ?
 
-                        messages.map(item => {
-                            return (
-                                <Message messages={item} currentUser={currentUser} />
-                            )
-                        })
+                        Array.isArray(messages)
+
+                            ?
+
+                            messages.map(item => {
+                                return (
+                                    <Message messages={item} currentUser={currentUser} />
+                                )
+                            })
+
+                            :
+
+                            <>
+                                <Message messages={messages} currentUser={currentUser} />
+                            </>
 
                         :
 

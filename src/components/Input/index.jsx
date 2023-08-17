@@ -12,18 +12,19 @@ const Input = props => {
 
     const name = useSelector((state) => state.user.name)
     const id = useSelector((state) => state.user.id)
+    const idRoom = useSelector((state) => state.user.idRoom)
 
     const [message, setMessage] = useState('')
 
     const sendMessage = () => {
         const obj = {
+            idRoom: idRoom,
             message: message,
             userInfo: { name: name, id: id }
         }
 
-        console.log(obj)
-
         socket.emit('newMessage', obj)
+        setMessage('')
     }
 
     return(

@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { userActions } from '../reducer/user'
 
 import {
     LoginContent
@@ -11,13 +13,17 @@ const Login = props => {
     } = props
 
     const navigate = useNavigate()
+    const dispatch = useDispatch()
 
     const [name, setName] = useState('')
+    const [idRoom, setIdRoom] = useState('')
 
     const login = () => {
-        socket.emit('login', name)
+        dispatch(userActions.setIdRoom(idRoom))
 
-        navigate('/chat')
+        socket.emit('login', { name: name, idRoom: idRoom })
+
+        navigate(`/chat/${idRoom}`)
     }
 
     return (
@@ -31,6 +37,8 @@ const Login = props => {
 
                 <div className='content-right-input'>
                     <input onChange={(e) => setName(e.target.value)} type="text" placeholder='Nickname' />
+
+                    <input onChange={(e) => setIdRoom(e.target.value)} type="text" placeholder='Room Code' />
 
                     <button onClick={() => login()}>ENTER</button>
                 </div>
