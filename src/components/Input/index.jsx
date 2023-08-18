@@ -18,10 +18,6 @@ const Input = props => {
 
     const [message, setMessage] = useState('')
 
-    useEffect(() => {
-        document.addEventListener('keydown', keyPressed => { if (keyPressed.key === 'Enter') { sendMessage() } else return })
-    }, [])
-
     const sendMessage = () => {
         if (message !== '') {
             if (!filter(message)) {
@@ -37,6 +33,10 @@ const Input = props => {
             } else alert('Não digite mensagens de baixo calão >:C')
         } else alert('Digite uma mensagem')
     }
+
+    useEffect(() => {
+        document.addEventListener('keydown', keyPressed => { if (keyPressed.key === 'Enter') { sendMessage() } else return })
+    }, [])
 
     return (
         <Content>
