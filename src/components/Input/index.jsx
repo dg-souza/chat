@@ -1,9 +1,11 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 
 import {
     Content
 } from './style'
+
+import { filter } from '../../utils/filter'
 
 const Input = props => {
     const {
@@ -16,20 +18,29 @@ const Input = props => {
 
     const [message, setMessage] = useState('')
 
-    const sendMessage = () => {
-        const obj = {
-            idRoom: idRoom,
-            message: message,
-            userInfo: { name: name, id: id }
-        }
+    useEffect(() => {
+        document.addEventListener('keydown', keyPressed => { if (keyPressed.key === 'Enter') { sendMessage() } else return })
+    }, [])
 
-        socket.emit('newMessage', obj)
-        setMessage('')
+    const sendMessage = () => {
+        if (message !== '') {
+            if (!filter(message)) {
+                const obj = {
+                    idRoom: idRoom,
+                    message: message,
+                    userInfo: { name: name, id: id }
+                }
+
+                socket.emit('newMessage', obj)
+
+                setMessage('')
+            } else alert('Não digite mensagens de baixo calão >:C')
+        } else alert('Digite uma mensagem')
     }
 
-    return(
+    return (
         <Content>
-            <input onChange={(e) => setMessage(e.target.value)} type="text" placeholder='Text Here' />
+            <input onChange={(e) => setMessage(e.target.value)} value={message} type="text" placeholder='Text Here' />
 
             <button onClick={() => sendMessage()}>SEND</button>
         </Content>

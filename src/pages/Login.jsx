@@ -36,9 +36,9 @@ const Login = props => {
                 <h2>Enter a nickname</h2>
 
                 <div className='content-right-input'>
-                    <input onChange={(e) => setName(e.target.value)} type="text" placeholder='Nickname' />
+                    <input onChange={(e) => setName(e.target.value)} value={name} type="text" placeholder='Nickname' />
 
-                    <input onChange={(e) => setIdRoom(e.target.value)} type="text" placeholder='Room Code' />
+                    <input onChange={(e) => setIdRoom(e.target.value)} value={idRoom} type="text" placeholder='Room Code' />
 
                     <button onClick={() => login()}>ENTER</button>
                 </div>
