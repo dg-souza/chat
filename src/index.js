@@ -1,7 +1,6 @@
 import express from 'express'
 import http from 'http'
 import { Server } from 'socket.io'
-import UserSocket from './sockets/userSocket.js'
 import ChatService from './services/chatService.js'
 import UserService from './services/userService.js'
 import db from './config/db.js'
@@ -33,6 +32,6 @@ io.on('connection', (socket) => {
     })
 })
 
-server.listen('3001', () => {
+server.listen(process.env.SERVER_PORT || 3001, () => {
     console.log('Rodando na porta 3001')
 })
