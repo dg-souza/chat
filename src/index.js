@@ -32,6 +32,6 @@ io.on('connection', (socket) => {
     })
 })
 
-server.listen(process.env.SERVER_PORT || 3001, () => {
+server.listen(process.env.PORT || 3001, () => {
     console.log('Rodando na porta 3001')
 })
