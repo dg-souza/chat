@@ -1,11 +1,15 @@
+import cors from 'cors'
 import express from 'express'
 import http from 'http'
 import { Server } from 'socket.io'
 import ChatService from './services/chatService.js'
 import UserService from './services/userService.js'
 import db from './config/db.js'
+import 'dotenv/config.js'
 
 const app = express()
+
+app.use(cors({ origin: process.env.ORIGIN }))
 
 db.once('open', () => {
     console.log('Conectado ao banco com sucesso')
