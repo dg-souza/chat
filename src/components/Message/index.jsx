@@ -12,7 +12,7 @@ const Message = props => {
     console.log(messages)
 
     return (
-        <Content isSender={messages.userInfo.id === currentUser._id ? true : false}>
+        <Content isSender={messages.userInfo.id === currentUser.id ? true : false}>
             <div className='message-content'>
                 <h3>{messages.userInfo.name}</h3>
 

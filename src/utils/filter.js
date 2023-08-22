@@ -8,3 +8,7 @@ export const filter = (text) => {
 
     return response
 }
+
+export const sleep = (ms) => {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}

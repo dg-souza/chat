@@ -8,6 +8,7 @@ export const Content = styled.div`
     .message-content {
         display: flex;
         flex-direction: column;
+        overflow: hidden;
 
         h3 {
             margin: 0;
@@ -19,7 +20,7 @@ export const Content = styled.div`
             justify-content: center;
             padding: 10px;
             background-color: #6666cc;
-            max-width: 250px;
+            max-width: 400px;
             color: #fff;
         }
     }

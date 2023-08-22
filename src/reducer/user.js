@@ -5,6 +5,7 @@ const userSlicer = createSlice({
     initialState: {
         name: '',
         id: '',
+        email: '',
         idRoom: ''
     },
     reducers: {
@@ -12,7 +13,8 @@ const userSlicer = createSlice({
             const userInfo = action.payload
 
             state.name = userInfo.name
-            state.id = userInfo.id
+            state.id = userInfo?.id
+            state.email = userInfo.email
         },
         setIdRoom(state, action) {
             state.idRoom = action.payload

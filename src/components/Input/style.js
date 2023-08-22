@@ -7,11 +7,11 @@ export const Content = styled.div`
 
     input {
         width: 100%;
-        border: 1px solid gray;
         border-radius: 4px;
         padding: 8px;
         font-size: 20px;
         outline: none;
+        border: none;
     }
 
     button {
