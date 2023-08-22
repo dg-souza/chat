@@ -9,14 +9,12 @@ import 'dotenv/config.js'
 
 const app = express()
 
-app.use(cors({ origin: 'https://citrag.netlify.app' }))
-
 db.once('open', () => {
     console.log('Conectado ao banco com sucesso')
 })
 
 const server = http.createServer(app)
-const io = new Server(server)
+const io = new Server(server, { cors: { origin: 'https://citrag.netlify.app' }})
 
 io.on('connection', (socket) => {
     console.log('usuario connectado')
