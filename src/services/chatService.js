@@ -11,6 +11,16 @@ class ChatService {
         }
     }
 
+    static findAllDistinct = async () => {
+        try {
+            const response = await chats.find().distinct('idRoom')
+
+            return response
+        } catch (err) {
+            throw new Error('Erro: '+ err.message)
+        }
+    }
+
     static findById = async (idRoom) => {
         try {
             const response = await chats.find({ idRoom })

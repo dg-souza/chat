@@ -1,11 +1,15 @@
 import users from "../models/user.js";
 
 class UserService {
-    static async createUser(userName) {
+    static async createUser(obj) {
         try {
-            const newUser = await users.create({ name: userName })
+            let user = await users.findOne({ email: obj.email })
 
-            return newUser
+            if(!user) {
+                user = await users.create(obj)
+            }
+
+            return user
         } catch(err) {
             throw new Error('Erro ao criar usuario: '+ err.message)
         }
