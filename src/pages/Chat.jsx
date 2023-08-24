@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
-import { userActions } from '../reducer/user'
 import { useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 
 import {
     ChatContent
@@ -9,30 +8,32 @@ import {
 
 import Message from '../components/Message'
 import Input from '../components/Input'
+import BtnLogout from '../components/BtnLogout'
 
 const Chat = props => {
     const {
         socket
     } = props
 
-    const dispatch = useDispatch()
+    const navigate = useNavigate()
+
     const [messages, setMessages] = useState([])
     const [currentUser, setCurrentUser] = useState({})
-    const name = useSelector((state) => state.user)
+    const user = useSelector((state) => state.user)
 
     useEffect(() => {
-        setCurrentUser(name)
+        verifyLogin()
+
+        setCurrentUser(user)
     }, [])
+
+    const verifyLogin = () => {
+        if(!user.email) navigate('/')
+    }
 
     socket.on('sendChat', (response) => {
         setMessages(response)
     })
-
-    // socket.on('receiveLogin', user => {
-    //     setCurrentUser(user)
-
-    //     dispatch(userActions.login({ name: user.name, id: user._id, email: user.email }))
-    // })
 
     socket.on('getAllMessages', (messages) => {
         setMessages(messages)
@@ -50,16 +51,16 @@ const Chat = props => {
 
                             ?
 
-                            messages.map(item => {
+                            messages.map((item, index) => {
                                 return (
-                                    <Message messages={item} currentUser={currentUser} />
+                                    <Message messages={item} key={index} currentUser={currentUser} />
                                 )
                             })
 
                             :
 
                             <>
-                                <Message messages={messages} currentUser={currentUser} />
+                                <h1>nothing</h1>
                             </>
 
                         :
@@ -73,6 +74,7 @@ const Chat = props => {
             <div className='input-content'>
                 <Input socket={socket} />
             </div>
+            <BtnLogout socket={socket} idRoom={user.idRoom} />
         </ChatContent>
     )
 }

@@ -2,8 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { userActions } from '../reducer/user'
-import { sleep } from '../utils/filter'
-import { teste } from '../services/firebase'
+import { loginFirebase } from '../services/firebase'
 
 import {
     LoginContent
@@ -12,6 +11,7 @@ import {
 import LoginBackground from '../assets/login-background.svg'
 
 import ArrowRight from '../assets/arrow-right.png'
+import { getMessage } from '../utils/Toast'
 
 const Login = props => {
     const {
@@ -27,8 +27,8 @@ const Login = props => {
     const [isRoom, setIsRoom] = useState(false)
     const [allRooms, setAllRooms] = useState([])
 
-    const loginGoogle = async (id) => {
-        const response = await teste()
+    const loginGoogle = async () => {
+        const response = await loginFirebase()
 
         socket.emit('loginGoogle', { name: response.user.displayName, email: response.user.email })
     }
@@ -39,12 +39,10 @@ const Login = props => {
 
             dispatch(userActions.setIdRoom(id))
             navigate(`/chat/${id}`)
-        } else { setIsValid(true) }
+        } else getMessage('error', 'Login and type/choose a room')
     }
 
     socket.on('receiveLogin', user => {
-        console.log(user)
-
         setUserName(user.name)
         dispatch(userActions.login({ name: user.name, id: user._id, email: user.email }))
     })
@@ -71,10 +69,12 @@ const Login = props => {
 
                     <input onChange={(e) => setIdRoom(e.target.value)} value={idRoom} type="text" placeholder='Room Code' />
 
-                    <button onClick={() => login(idRoom)}>ENTER</button>
+                    <button className='btnLogin' onClick={() => login(idRoom)}>ENTER</button>
 
-                    <span>Enter an <b onClick={() => setIsRoom(true)}>existing room</b></span>
+                    <img src={ArrowRight} onClick={() => login(idRoom)} alt="Arrow" />                    
                 </div>
+
+                <span>Enter an <b onClick={() => setIsRoom(true)}>existing room</b></span>
             </div>
 
             <div className='content-right-room'>
@@ -86,13 +86,13 @@ const Login = props => {
 
                 <div className='rooms-list'>
                     {
-                        allRooms !== null
+                        allRooms.length > 0
 
                             ?
 
-                            allRooms.map(item => {
+                            allRooms.map((item, index) => {
                                 return (
-                                    <div className='room'>
+                                    <div className='room' key={index}>
                                         <span>{item}</span>
 
                                         <img
@@ -101,14 +101,15 @@ const Login = props => {
                                                 setIdRoom(item)
                                                 login(item)
                                             }}
-                                            alt="Arrow" />
+                                            alt="Arrow"
+                                        />
                                     </div>
                                 )
                             })
 
                             :
 
-                            <></>
+                            <>No rooms created</>
                     }
                 </div>
 

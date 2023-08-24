@@ -1,9 +1,11 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useSelector } from 'react-redux'
 
 import {
     Content
 } from './style'
+
+import { getMessage } from '../../utils/Toast'
 
 import { filter } from '../../utils/filter'
 
@@ -18,8 +20,10 @@ const Input = props => {
 
     const [message, setMessage] = useState('')
 
-    const sendMessage = () => {
-        if (message !== '') {
+    const sendMessage = (e) => {
+        e.preventDefault()
+
+        if (message) {
             if (!filter(message)) {
                 const obj = {
                     idRoom: idRoom,
@@ -30,19 +34,17 @@ const Input = props => {
                 socket.emit('newMessage', obj)
 
                 setMessage('')
-            } else alert('Não digite mensagens de baixo calão >:C')
-        } else alert('Digite uma mensagem')
+            } else getMessage('error', 'No Badwoords :C')
+        } else getMessage('error', 'Type a message')
     }
-
-    useEffect(() => {
-        document.addEventListener('keydown', keyPressed => { if (keyPressed.key === 'Enter') { sendMessage() } else return })
-    }, [])
 
     return (
         <Content>
-            <input onChange={(e) => setMessage(e.target.value)} value={message} type="text" placeholder='Text Here' />
+            <form>
+                <input onChange={(e) => setMessage(e.target.value)} value={message} type="text" placeholder='Text Here' />
 
-            <button onClick={() => sendMessage()}>SEND</button>
+                <button onClick={(e) => sendMessage(e)}>SEND</button>
+            </form>
         </Content>
     )
 }

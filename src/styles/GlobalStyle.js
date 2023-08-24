@@ -45,6 +45,18 @@ export const LoginContent = styled.div`
 
         .btnGoogle {
             background-color: #C2513E;
+            content: 'Teste';
+        }
+
+        img {
+            width: 50px;
+            cursor: pointer;
+
+            transition: 0.3s;
+
+            &:hover {
+                scale: 1.1;
+            }
         }
 
         .rooms-list {
@@ -64,15 +76,11 @@ export const LoginContent = styled.div`
                     width: 100%;
                     justify-content: space-around;
 
-                    img {
-                        width: 50px;
-                        cursor: pointer;
+                    span {
+                        display: flex;
+                        width: 20%;
 
-                        transition: 0.3s;
-
-                        &:hover {
-                            scale: 1.1;
-                        }
+                        overflow-x: hidden;
                     }
                 }
             }
@@ -111,23 +119,51 @@ export const LoginContent = styled.div`
                     cursor: pointer;
                 }
             }
+
+            img {
+                display: none;
+                width: 50px;
+
+                &:hover {
+                    scale: 1.1;
+                    cursor: pointer;
+                }
+            }
+        }
+
+        span {
+            margin-top: 10px;
         }
 
         b {
-                color: #8565CB;
-                cursor: pointer;
-            }
+            color: #8565CB;
+            cursor: pointer;
+        }
     }
 
     .content-right {
         display: ${props => props.isRoom ? 'none' : 'flex'};
+        
+        animation: fade-out 800ms ease;
     }
 
     .content-right-room {
         display: ${props => props.isRoom ? 'flex' : 'none'};
+
+        animation: fade-in 800ms ease;
+    }
+
+    @keyframes fade-out {
+        100% { opacity: 1; }
+        0% { opacity: 0; }
+    }
+
+    @keyframes fade-in {
+        0% { opacity: 0; }
+        100% { opacity: 1; }
     }
     
-    @media(max-width: 1265px) {
+    @media(max-width: 1300px) {
         .content-left {
             width: 500px;
 
@@ -148,6 +184,48 @@ export const LoginContent = styled.div`
 
         .content-right, .content-right-room {
             width: 400px;
+            border-radius: 5px;
+        }
+    }
+
+    @media(max-width: 450px) {
+        .content-right, .content-right-room {
+            width: 200px;
+            height: 400px;
+
+            h2 {
+                font-size: 18px;
+            }
+
+            span {
+                font-size: 12px;
+            }
+
+            .content-right-input {
+                input {
+                    width: 50%;
+                    text-align: center;
+                }
+
+                .btnLogin {
+                    display: none;
+                }
+
+                img {
+                    display: flex;
+                }
+            }
+
+            .room {
+                span {
+                    font-size: 12px;
+                    width: 10%;
+                }
+
+                img {
+                    width: 40px;
+                }
+            }
         }
     }
 `

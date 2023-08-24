@@ -1,24 +1,50 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import io from 'socket.io-client'
+import PrivateRoute from './pages/PrivateRoute'
 
 import Login from './pages/Login'
 import Chat from './pages/Chat'
+import Loading from './components/Loading'
 
 import {
   Container
 } from './styles/GlobalStyle'
 
-const App = () => {
-  const socket = io('http://localhost:3001')
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
-  return(
+const App = () => {
+  const socket = io(process.env.APP_URL || 'http://localhost:3001')
+  const [isLoading, setIsLoading] = useState(false)
+
+  socket.off('connect')
+
+  socket.on('connect', () => {
+    console.log('conectado')
+
+    setIsLoading(false)
+  })
+
+  useEffect(() => {
+    socket.connected === false ? setIsLoading(true) : setIsLoading(false)
+  }, [])
+
+  return (
     <Container>
+      <Loading isLoading={isLoading} />
       <BrowserRouter>
         <Routes>
           <Route path='/' element={<Login socket={socket} />} />
-          <Route path='/chat/:id' element={<Chat socket={socket} />} />
+          <Route path='/chat/:id' element={
+            <PrivateRoute>
+              <Chat socket={socket} />
+            </PrivateRoute>
+          } />
+          <Route path='*' element={<Navigate to='/' />} />
         </Routes>
       </BrowserRouter>
+      <ToastContainer />
     </Container>
   )
 }

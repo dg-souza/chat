@@ -23,6 +23,7 @@ const userSlicer = createSlice({
             state.name = ''
             state.id = ''
             state.idRoom = ''
+            state.email = ''
         }
     }
 })

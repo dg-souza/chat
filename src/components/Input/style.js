@@ -3,9 +3,13 @@ import styled from 'styled-components'
 export const Content = styled.div`
     display: flex;
     width: 100%;
-    gap: 10px;
 
-    input {
+    form {
+        display: flex;
+        width: 100%;
+        gap: 10px;
+
+        input {
         width: 100%;
         border-radius: 4px;
         padding: 8px;
@@ -25,5 +29,6 @@ export const Content = styled.div`
             cursor: pointer;
             scale: 0.9;
         }
+    }
     }
 `

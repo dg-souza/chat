@@ -8,9 +8,6 @@ const Message = props => {
         currentUser
     } = props
 
-    console.log(currentUser)
-    console.log(messages)
-
     return (
         <Content isSender={messages.userInfo.id === currentUser.id ? true : false}>
             <div className='message-content'>
