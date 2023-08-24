@@ -14,10 +14,12 @@ db.once('open', () => {
 })
 
 const server = http.createServer(app)
-const io = new Server(server, { cors: { origin: ['https://citrag.netlify.app', 'http://localhost:3000'], } })
+const io = new Server(server, { cors: { origin: [process.env.ORIGIN, 'http://localhost:3000'], } })
 
 io.on('connection', (socket) => {
     console.log('usuario connectado')
+
+    socket.on('disconnect', () => { console.log('usuario desconectado') })
 
     socket.on('initialRequest', async () => {
         const result = await ChatService.findAllDistinct()
@@ -34,6 +36,12 @@ io.on('connection', (socket) => {
     socket.on('login', async (idRoom) => {
         socket.join(idRoom)
         io.to(idRoom).emit('sendChat', await ChatService.findById(idRoom))
+    })
+
+    socket.on('logout', (idRoom) => {
+        socket.leave(idRoom)
+
+        console.log('Usuario desconectado')
     })
 
     socket.on('newMessage', async (obj) => {
