@@ -47,6 +47,10 @@ io.on('connection', (socket) => {
     socket.on('newMessage', async (obj) => {
         await ChatService.createOrUpdate(obj)
 
+        const result = await ChatService.findAllDistinct()
+
+        socket.broadcast.emit('response', result)
+
         io.to(obj.idRoom).emit('getAllMessages', await ChatService.findById(obj.idRoom))
     })
 })
