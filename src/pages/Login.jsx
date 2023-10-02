@@ -4,6 +4,8 @@ import { useDispatch } from 'react-redux'
 import { userActions } from '../reducer/user'
 import { loginFirebase } from '../services/firebase'
 
+import { useCookies } from 'react-cookie'
+
 import {
     LoginContent
 } from '../styles/GlobalStyle'
@@ -21,9 +23,9 @@ const Login = props => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
-    const [userName, setUserName] = useState('')
+    const [cookies, setCookie] = useCookies(['user'])
+
     const [idRoom, setIdRoom] = useState('')
-    const [isValid, setIsValid] = useState(false)
     const [isRoom, setIsRoom] = useState(false)
     const [allRooms, setAllRooms] = useState([])
 
@@ -34,7 +36,7 @@ const Login = props => {
     }
 
     const login = (id) => {
-        if (userName !== '' && id !== '') {
+        if (cookies.user !== 'undefined' && id !== '') {
             socket.emit('login', id)
 
             dispatch(userActions.setIdRoom(id))
@@ -43,9 +45,13 @@ const Login = props => {
     }
 
     socket.on('receiveLogin', user => {
-        setUserName(user.name)
         dispatch(userActions.login({ name: user.name, id: user._id, email: user.email }))
+        setCookie('user', { name: user.name, id: user._id, email: user.email })
     })
+
+    const verifyCookie = () => {
+        if (cookies.user) dispatch(userActions.login({ name: cookies.user.name, id: cookies.user.id, email: cookies.user.email }))
+    }
 
     useEffect(() => {
         socket.emit('initialRequest')
@@ -53,10 +59,13 @@ const Login = props => {
         socket.on('response', (rooms) => {
             setAllRooms(rooms)
         })
+
+        verifyCookie()
+        // eslint-disable-next-line
     }, [])
 
     return (
-        <LoginContent isValid={isValid} isRoom={isRoom} >
+        <LoginContent isRoom={isRoom} >
             <div className='content-left'>
                 <img src={LoginBackground} alt="Login Background" />
             </div>
@@ -65,13 +74,13 @@ const Login = props => {
                 <h2>Sign In</h2>
 
                 <div className='content-right-input'>
-                    {userName !== '' ? userName : <button className='btnGoogle' onClick={() => loginGoogle()}>LOGIN GMAIL</button>}
+                    {cookies.user !== 'undefined' ? cookies.user.name : <button className='btnGoogle' onClick={() => loginGoogle()}>LOGIN GMAIL</button>}
 
                     <input onChange={(e) => setIdRoom(e.target.value)} value={idRoom} type="text" placeholder='Room Code' />
 
                     <button className='btnLogin' onClick={() => login(idRoom)}>ENTER</button>
 
-                    <img src={ArrowRight} onClick={() => login(idRoom)} alt="Arrow" />                    
+                    <img src={ArrowRight} onClick={() => login(idRoom)} alt="Arrow" />
                 </div>
 
                 <span>Enter an <b onClick={() => setIsRoom(true)}>existing room</b></span>
@@ -81,7 +90,7 @@ const Login = props => {
                 <h2>Choose Room</h2>
 
                 <div className='content-right-input'>
-                    {userName !== '' ? userName : <button className='btnGoogle' onClick={() => loginGoogle()}>LOGIN GMAIL</button>}
+                    {cookies.user !== 'undefined' ? cookies.user.name : <button className='btnGoogle' onClick={() => loginGoogle()}>LOGIN GMAIL</button>}
                 </div>
 
                 <div className='rooms-list'>
@@ -113,7 +122,10 @@ const Login = props => {
                     }
                 </div>
 
-                <span>create <b onClick={() => setIsRoom(false)}>new room</b></span>
+                <span>create <b onClick={() => {
+                    setIsRoom(false)
+                    setIdRoom('')
+                }}>new room</b></span>
             </div>
         </LoginContent>
     )

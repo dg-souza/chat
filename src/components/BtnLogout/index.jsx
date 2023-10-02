@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom'
 
 import { logoutFirebase } from '../../services/firebase'
 
+import { useCookies } from 'react-cookie'
+
 import {
     Content
 } from './style'
@@ -19,7 +21,11 @@ const BtnLogout = props => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
+    const [cookies, removeCookie] = useCookies(['user'])
+
     const logout = () => {
+        removeCookie('user')
+
         socket.emit('logout', idRoom)
 
         dispatch(userActions.logout())

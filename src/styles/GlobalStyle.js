@@ -94,14 +94,14 @@ export const LoginContent = styled.div`
 
             input {
                 border: none;
-                border-bottom: 1px solid ${props => props.isValid ? 'red' : 'black'};
+                border-bottom: 1px solid black;
                 padding: 10px;
                 font-size: 16px;
                 outline: none;
                 width: 70%;
 
                 &:focus, &:hover {
-                    border-bottom: 2px solid ${props => props.isValid ? 'red' : 'black'};
+                    border-bottom: 2px solid black;
                 }
             }
 

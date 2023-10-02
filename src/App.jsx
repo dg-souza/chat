@@ -15,19 +15,18 @@ import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
 const App = () => {
-  const socket = io(process.env.APP_URL || 'http://localhost:3001')
+  const socket = io('http://localhost:3001')
   const [isLoading, setIsLoading] = useState(false)
 
   socket.off('connect')
 
   socket.on('connect', () => {
-    console.log('conectado')
-
     setIsLoading(false)
   })
 
   useEffect(() => {
     socket.connected === false ? setIsLoading(true) : setIsLoading(false)
+    // eslint-disable-next-line
   }, [])
 
   return (
